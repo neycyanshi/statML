@@ -8,28 +8,40 @@ mem = Memory("./mycache")
 
 
 @mem.cache  # decorator: get_data = mem.cache(get_data)
-def get_data(data_file_name):
-    data = load_svmlight_file(data_file_name)
+def get_data(data_file_name, n_features=123, dtype=np.float32):
+    data = load_svmlight_file(data_file_name, n_features, dtype)
     return data[0], data[1]
 
 
-train_name = 'a9a/a9a'
-test_name = 'a9a/a9a.t'
-X_train, y_train = get_data(train_name)  # (32561, 123), (32561,)
-X_test, y_test = get_data(test_name)  # (16281, 122), (16281,)
-
-discrepancy = X_train.shape[-1] - X_test.shape[-1]
-if discrepancy > 0:
-    # X_test.indptr = np.hstack((X_test.indptr, np.repeat(X_test.indptr[-1], discrepency))) # pad zeros to bottom row
-    X_test._shape = (X_test._shape[0], X_test.shape[1]+discrepancy) # pad zeros to rightest column
-
-# bias_train = csr_matrix(np.ones((X_train.shape[0], 1)))
-# bias_test = csr_matrix(np.ones((X_test.shape[0], 1)))
-# X_train = hstack((X_train, bias_train), format="csr")
-# X_test = hstack((X_test, bias_test), format="csr")
+def check_train_test_consistent(X_train, X_test):
+    discrepancy = X_train.shape[-1] - X_test.shape[-1]
+    if discrepancy > 0:
+        # X_test.indptr = np.hstack((X_test.indptr, np.repeat(X_test.indptr[-1], discrepency))) # pad zeros to bottom row
+        X_test._shape = (X_test._shape[0], X_test.shape[1]+discrepancy) # pad zeros to rightest column
+        print "padding %d columns of zero feature to X_test..." % discrepancy
+    else:
+        print "X_train and X_test are consistent."
 
 
-def LR_read(data_file_name):
+def feature_augment(X_train, X_test):
+    # augmented vector: input features [x, 1], model weights [w, b]
+    print "augmenting input feature vector to [x, 1] ..."
+    bias_train = csr_matrix(np.ones((X_train.shape[0], 1), dtype=np.float32))
+    bias_test = csr_matrix(np.ones((X_test.shape[0], 1), dtype=np.float32))
+    X_train = hstack((X_train, bias_train), format="csr")
+    X_test = hstack((X_test, bias_test), format="csr")
+
+    return X_train, X_test
+
+
+def label_prep(y_train, y_test):
+    # make label y in {0.0, 1.0}
+    print "changing label -1 to 0.0 ..."
+    y_train[y_train != 1.0] = 0.
+    y_test[y_test != 1.0] = 0.
+
+
+def LR_read_dense(data_file_name):
     """
     LR_read_problem(data_file_name) -> [y, x]
     Read LIBSVM-format data from data_file_name and return labels y
@@ -85,61 +97,6 @@ def sparse_dot(a, b, dense_output=False):
         return np.dot(a, b)
 
 
-def IRLS2(X, y, maxiter=100, w_init=1, d=0.0001, tol=0.1):
-    from numpy import array, diag, dot, maximum, empty, repeat, ones, sum
-    from numpy.linalg import inv, pinv
-
-    D, N = X.shape
-    X = np.vstack((X, np.ones(N)))
-    D += 1
-    X = X.T
-    y = y.reshape((N, 1))
-    n, p = X.shape
-    delta = array(repeat(d, n)).reshape(1, n)
-    w = repeat(1, n)
-    W = diag(w)
-    # print "rank of H = %d" % np.linalg.matrix_rank(X.T.dot(W).dot(X))
-    B = dot(pinv(X.T.dot(W).dot(X)), (X.T.dot(W).dot(y)))
-    for it in range(maxiter):
-        print "IRLS2 iter: %d" % it
-        _B = B
-        _w = abs(y - X.dot(B)).T
-        w = float(1) / maximum(delta, _w)
-        W = diag(w[0])
-        B = dot(pinv(X.T.dot(W).dot(X)), (X.T.dot(W).dot(y)))
-        werr = sum(abs(B - _B))
-        print "iter %d: werr = %f" % (it, werr)
-        if werr < tol:
-            return B
-    return B
-
-
-def IRLS1(X, y, reg=0, max_iter=200, w_init=0.01, tol=0.001, seed=1996):
-    D, N = X.shape
-    X = np.vstack((X, np.ones(N)))
-    D += 1
-    # w_old = w_init * np.ones(D)
-    np.random.seed(seed)
-    w_new = w_init * np.random.rand(D)
-    for it in xrange(max_iter):
-        w_old = w_new
-        mu = np.empty(N)
-        expit(w_old.dot(X), mu) # expit(x): 1/(1+exp(-x))
-        Rflat = mu * (1 - mu)
-        grad = X.dot(y - mu)
-        H = -np.dot(X * Rflat, X.T)
-        w_new = w_old - np.linalg.pinv(H).dot(grad)
-        #        criterion = np.dot((mu-y).T, (1/R)*(mu-y)) / 2 # Newton criterion
-        criterion = np.sum(abs(w_new - w_old))
-        # criterion = np.max(np.abs(np.dot(X, (y - mu))))
-        if criterion < tol:
-            print "stop at iteration: %d" % it
-            return w_new
-
-    print "reach max_iter: %d" % max_iter
-    return w_new
-
-
 def my_expit(x):
     # 1 / (1 + exp(-x)) = (1 + tanh(x / 2)) / 2
     # This way of computing the logistic is both fast and stable. learn from scikit-learn/fixes.py
@@ -151,15 +108,10 @@ def my_expit(x):
     return x
 
 
-def exp_zero(x):
+def my_exp_zero(x):
     # if x<0, return exp(x)/(1+exp(x))
-    # element-wise: this way of computing the logistic is stable.
-    if x >= 0:
-        z = np.exp(-x)
-        return 1 / (1 + z)
-    else:
-        z = np.exp(x)
-        return z / (1 + z)
+    # this way of computing the logistic is stable.
+    return np.where(x>0, 1/(1+np.exp(-x)), np.exp(x)/(1+np.exp(x)))
 
 
 def _intercept_dot(w, X):
@@ -210,13 +162,14 @@ class LR_IRLS():
     n_iter_ : array, shape (n_classes,) or (1, )
         Actual number of iterations, returns only 1 element.
     """
-    def __init__(self, reg=0.5, tol=1e-4, fit_intercept=True, random_state=None, max_iter=100, verbose=0):
+    def __init__(self, reg=0.5, tol=1e-4, fit_intercept=True, random_state=None, max_iter=100, verbose=0, save=True):
         self.reg = reg
         self.tol = tol
         self.fit_intercept = fit_intercept
         self.random_state = random_state
         self.max_iter = max_iter
         self.verbose = verbose
+        self.save = save
 
     def fit(self, X, y):
         """Fit the model according to the given tarining data.
@@ -252,10 +205,13 @@ class LR_IRLS():
             classes_ = classes_[1:]
 
         # Consider try different regs in parallel??
+        if self.verbose:
+            print "training my LR_IRLS model.."
         w_new = np.zeros(n_features)
         # np.random.seed(self.random_state)
         # w_new = np.random.rand(n_features)
         eps = 1e-6
+        reach_max_iter = True
         for it in xrange(self.max_iter):
             w_old = w_new
             mu = expit(sparse_dot(X, w_new, dense_output=True))
@@ -268,22 +224,28 @@ class LR_IRLS():
             w_new = np.dot(np.linalg.inv(A), b).A1 # Equivalent to np.asarray(x).ravel()
 
             criterion = np.sum(abs(w_new - w_old))
-            print "iter: %r criterion = %r" % (it, criterion)
+            if self.verbose: print "iter: %r criterion = %r" % (it, criterion)
             if criterion < self.tol:
-                print "stop at iteration: %d" % it
+                print "stop at iter %d.\n" % it
+                reach_max_iter = False
                 break
 
-        print "reach max_iter: %d" % self.max_iter
+        if reach_max_iter:
+            print "reach max_iter: %d" % self.max_iter
         self.coef_ = w_new[:-1]
         self.intercept_ = w_new[-1]
+        if self.save:
+            print "saving my Logistic Regression model...\n"
+            dump(self, "LR_IRLS.model")
         return self
 
     def predict_proba(self, X):
         if not hasattr(self, "coef_"):
             raise ValueError("Call fit before prediction")
+
         if X.shape[1] == self.coef_.shape[0] + 1 and hasattr(self, "intercept_"):
             w = np.hstack((self.coef_, self.intercept_))
-        if X.shape[1] == self.coef_.shape[0] and self.fit_intercept == False:
+        elif X.shape[1] == self.coef_.shape[0] and self.fit_intercept == False:
             w = self.coef_
         else:
             raise ValueError("Mismatch X and w")
@@ -296,16 +258,70 @@ class LR_IRLS():
         prob = self.predict_proba(X)
         ret = np.round(prob)
 
-        if y:
-            errcnt = np.sum(abs(prob - y))
+        if y is not None:
+            errcnt = np.sum(abs(ret - y)) # y in {0.0, 1.0}
             accuracy = 100 * (1 - errcnt / y.shape[0])
             print "accuracy of my IRLS: %.2f" % accuracy
 
         return ret
 
 
+def LR_relu(X, y, maxiter=100, w_init=1, d=0.0001, tol=0.1):
+    from numpy import array, diag, dot, maximum, empty, repeat, ones, sum
+    from numpy.linalg import inv, pinv
 
-def IRLS0(X, y, reg=0.5, max_iter=100, w_init=0., tol=1e-4, eps=1e-6, seed=1996, save=True):
+    D, N = X.shape
+    X = np.vstack((X, np.ones(N)))
+    D += 1
+    X = X.T
+    y = y.reshape((N, 1))
+    n, p = X.shape
+    delta = array(repeat(d, n)).reshape(1, n)
+    w = repeat(1, n)
+    W = diag(w)
+    # print "rank of H = %d" % np.linalg.matrix_rank(X.T.dot(W).dot(X))
+    B = dot(pinv(X.T.dot(W).dot(X)), (X.T.dot(W).dot(y)))
+    for it in range(maxiter):
+        print "IRLS2 iter: %d" % it
+        _B = B
+        _w = abs(y - X.dot(B)).T
+        w = float(1) / maximum(delta, _w)
+        W = diag(w[0])
+        B = dot(pinv(X.T.dot(W).dot(X)), (X.T.dot(W).dot(y)))
+        werr = sum(abs(B - _B))
+        print "iter %d: werr = %f" % (it, werr)
+        if werr < tol:
+            return B
+    return B
+
+
+def LR_newton(X, y, reg=0, max_iter=200, w_init=0.01, tol=0.001, seed=1996):
+    D, N = X.shape
+    X = np.vstack((X, np.ones(N)))
+    D += 1
+    # w_old = w_init * np.ones(D)
+    np.random.seed(seed)
+    w_new = w_init * np.random.rand(D)
+    for it in xrange(max_iter):
+        w_old = w_new
+        mu = np.empty(N)
+        expit(w_old.dot(X), mu) # expit(x): 1/(1+exp(-x))
+        Rflat = mu * (1 - mu)
+        grad = X.dot(y - mu)
+        H = -np.dot(X * Rflat, X.T)
+        w_new = w_old - np.linalg.pinv(H).dot(grad)
+        # criterion = np.dot((mu-y).T, (1/R)*(mu-y)) / 2 # Newton criterion
+        criterion = np.sum(abs(w_new - w_old))
+        # criterion = np.max(np.abs(np.dot(X, (y - mu)))) # grad should be small
+        if criterion < tol:
+            print "stop at iteration: %d" % it
+            return w_new
+
+    print "reach max_iter: %d" % max_iter
+    return w_new
+
+
+def IRLS_dense(X, y, reg=0.5, max_iter=100, w_init=0., tol=1e-4, eps=1e-6, seed=1996, save=True):
     D, N = X.shape
     X = np.vstack((X, np.ones(N)))
     D += 1
@@ -316,26 +332,20 @@ def IRLS0(X, y, reg=0.5, max_iter=100, w_init=0., tol=1e-4, eps=1e-6, seed=1996,
         w_old = w_new
         mu = np.empty(N)
         expit(w_new.dot(X), mu)
-        # mu = expit(-sparse_dot(w_new, X))
         R = mu * (1 - mu)
         Rinv = 1.0 / np.maximum(R, eps)
         z = X.T.dot(w_old) - Rinv * (mu - y)
-        # z = sparse_dot(X.T, w_old) - Rinv * (mu - y)
         A = np.dot(X * R, X.T) + reg * np.eye(D)
-        # A = sparse_dot(X * R, X.T) + reg * np.eye(D)
         b = np.dot(X, R * z)
-        # b = sparse_dot(X, R * z)
 
-        w_new = np.dot(np.linalg.pinv(A), b)  # CG: from scipy.sparse.linalg import cg
-        # w_new /= np.sum(w_new)
-
-        #        fun = lambda w: 0.5*np.sum(A.dot(w)**2) - np.sum(b*(A.dot(w))) + 0.5*np.sum(b**2)
-        #        gfun = lambda w: A.T.dot(A.dot(w)) - b
-        #        fun = lambda w: w.dot(A.dot(w)) - w.dot(b)
-        #        gfun = lambda w: A.dot(w) - b
-        #        w_new, Y, _ = frcg(fun, gfun, w_old)
+        w_new = np.dot(np.linalg.pinv(A), b)  # try CG: from scipy.sparse.linalg import cg
+        # fun = lambda w: 0.5*np.sum(A.dot(w)**2) - np.sum(b*(A.dot(w))) + 0.5*np.sum(b**2)
+        # gfun = lambda w: A.T.dot(A.dot(w)) - b
+        # fun = lambda w: w.dot(A.dot(w)) - w.dot(b)
+        # gfun = lambda w: A.dot(w) - b
+        # w_new, Y, _ = frcg(fun, gfun, w_old)
         #
-        #        w_new, info = cg(A, b, tol=0.1) # scipy.sparse.linalg.cg
+        # w_new, info = cg(A, b, tol=0.1) # scipy.sparse.linalg.cg
 
         criterion = np.sum(abs(w_new - w_old))
         # criterion = np.max(np.abs(np.dot(X, (y-mu))))
@@ -345,8 +355,7 @@ def IRLS0(X, y, reg=0.5, max_iter=100, w_init=0., tol=1e-4, eps=1e-6, seed=1996,
 
     print "reach max_iter: %d" % max_iter
     if save:
-        pass
-        # dump(lr, "lr.model")
+        dump(lr, "lr.model")
     return w_new
 
 
@@ -397,43 +406,51 @@ def frcg(fun, gfun, x0):
     return x0, fun(x0), k
 
 
-# w = IRLS2(X,y)
+def sklearn_LR(X_train, y_train, X_test, y_test):
+    from sklearn.linear_model import LogisticRegression
 
-from sklearn.linear_model import LogisticRegression
+    print "training model from sklearn.linear_model.LogisticRegression."
+    lr = LogisticRegression(random_state=1996)
+    lr.fit(X_train, y_train)
 
-lr = LogisticRegression(random_state=1996)
-lr.fit(X_train, y_train)
-w0 = lr.coef_.ravel(); b0 = lr.intercept_
-mu = np.empty(X_train.shape[0])
-expit(X_train*w0 + b0, mu)
-grad = X_train.T*(y_train-mu)
-# coefNorm = np.sum(w0) + b0
-# print "L1-norm(w0) = %f" % coefNorm
-# w0_normalized = w0 / coefNorm
-# b0_normalized = b0 / coefNorm
-# print "L1-norm(w0) = %f after normalization" % (np.sum(w0_normalized) + b0_normalized)
-# lr.coef_ = w0_normalized
-# lr.intercept_ = b0_normalized
-C = lr.predict(X_test)
-errcnt = np.sum(abs(C - y_test) / 2)
-accuracy = 100 * (1 - errcnt / y_test.shape[0])
-print "accuracy of sklearn.linear_model.LogisticRegression: %.2f" % accuracy
+    # check gradient == 0
+    w0 = lr.coef_.ravel()
+    b0 = lr.intercept_
+    mu = np.empty(X_train.shape[0])
+    expit(X_train * w0 + b0, mu)
+    grad = X_train.T * (y_train - mu)
+    print "l1-norm of optim state log-likelihood func's gradient: %r" % np.sum(np.abs(grad))
 
+    # predict label of X_test
+    label = lr.predict(X_test)
+    errcnt = np.sum(abs(label - y_test) / 2)  # y in {-1.0, +1.0}
+    accuracy = 100 * (1 - errcnt / y_test.shape[0])
+    print "accuracy of sklearn.linear_model.LogisticRegression: %.2f\n" % accuracy
 
 
-# my_lr = LR_IRLS(random_state=1996, verbose=1)
-# my_lr.fit(X_train, y_train)
-# C = my_lr.predict(X_test, y_test)
 
+if __name__ == "__main__":
+    train_name = 'a9a/a9a'
+    test_name = 'a9a/a9a.t'
+    X_train, y_train = get_data(train_name)  # (32561, 123), (32561,)
+    X_test, y_test = get_data(test_name)  # (16281, 122), (16281,)
 
-y, X = LR_read(test_name)
-y[y == -1] = 0
-w = IRLS0(X, y)
-score = w.dot(np.vstack((X, np.ones(y.shape[0]))))  # (N,)
-prob = np.empty(*score.shape)
-expit(score, prob)
-prob = np.round(prob)
-errcnt = np.sum(abs(prob - y))
-accuracy = 100 * (1 - errcnt / y.shape[0])
-print "accuracy of my IRLS: %.2f" % accuracy
-print "done!"
+    # compare with LogisticRegression from sklearn.linear_model
+    sklearn_LR(X_train, y_train, X_test, y_test)
+
+    # Logistic Regression using IRLS
+    X_train, X_test = feature_augment(X_train, X_test)
+    label_prep(y_train, y_test)
+    check_train_test_consistent(X_train, X_test)
+    manual_seed = 1996
+    my_lr = LR_IRLS(random_state=manual_seed, verbose=1)
+    my_lr.fit(X_train, y_train)
+    label = my_lr.predict(X_test, y_test)
+
+    """
+    # reuse trained LR_IRLS.model
+    old_model = load("LR_IRLS.model")
+    label = old_model.predict(X_test, y_test)
+    """
+
+    print "done!"
