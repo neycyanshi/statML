@@ -543,6 +543,8 @@ if __name__ == "__main__":
     plt.ylabel("Test Error Rate")
     plt.show()
 
+    
+
 
     """
     # try preprocess feature by scaling to unit variance before regression, however get the same acc, futile...
