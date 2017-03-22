@@ -1,9 +1,8 @@
 import numpy as np
-from scipy.sparse import issparse, csr_matrix, hstack, dia_matrix
+import scipy.sparse as sparse
 from scipy.special import expit
 from sklearn.externals.joblib import Memory, dump, load
 from sklearn.datasets import load_svmlight_file
-from sklearn.cross_validation import cross_val_score
 import matplotlib.pyplot as plt
 
 mem = Memory("./mycache")
@@ -28,10 +27,10 @@ def check_train_test_consistent(X_train, X_test):
 def feature_augment(X_train, X_test):
     # augmented vector: input features [x, 1], model weights [w, b]
     print "augmenting input feature vector to [x, 1] ..."
-    bias_train = csr_matrix(np.ones((X_train.shape[0], 1), dtype=np.float32))
-    bias_test = csr_matrix(np.ones((X_test.shape[0], 1), dtype=np.float32))
-    X_train = hstack((X_train, bias_train), format="csr")
-    X_test = hstack((X_test, bias_test), format="csr")
+    bias_train = sparse.csr_matrix(np.ones((X_train.shape[0], 1), dtype=np.float32))
+    bias_test = sparse.csr_matrix(np.ones((X_test.shape[0], 1), dtype=np.float32))
+    X_train = sparse.hstack((X_train, bias_train), format="csr")
+    X_test = sparse.hstack((X_test, bias_test), format="csr")
 
     return X_train, X_test
 
@@ -88,7 +87,7 @@ def sparse_dot(a, b, dense_output=False):
 
     Uses BLAS GEMM as replacement for numpy.dot where possible to avoid unnecessary copies
     """
-    if issparse(a) or issparse(b):
+    if sparse.issparse(a) or sparse.issparse(b):
         ret = a * b
         if dense_output and hasattr(ret, "toarray"):
             ret = ret.toarray()
@@ -97,6 +96,41 @@ def sparse_dot(a, b, dense_output=False):
         # if np_version < (1, 7, 2): # np_version = _parse_version(np.__version__)
         #     warnings.warn("Falling back to slow dot product in older Numpy.")
         return np.dot(a, b)
+
+
+def sparse_split(mat, row_divs=[]):
+    """
+    mat is a sparse matrix
+    row_divs is a list of divisions between rows.  N row_divs will produce N+1 rows of sparse matrices
+    return a list of sparse matrices
+    """
+    if sparse.issparse(mat):
+        row_divs = [None] + row_divs + [None]
+        list_of_mats = []
+        for (rs, re) in zip(row_divs[:-1], row_divs[1:]):
+            list_of_mats += [mat[rs:re]]
+    else:
+        list_of_mats = np.array_split(mat, len(row_divs)+1, axis=0)
+
+    return list_of_mats
+
+
+def sparse_block_split(mat, row_divs=[], col_divs=[]):
+    """
+    mat is a sparse matrix
+    row_divs is a list of divisions between rows.  N row_divs will produce N+1 rows of sparse matrices
+    col_divs is a list of divisions between cols.  N col_divs will produce N+1 cols of sparse matrices
+    return a 2-D array of sparse matrices
+    """
+    row_divs = [None] + row_divs + [None]
+    col_divs = [None] + col_divs + [None]
+
+    mat_of_mats = np.empty((len(row_divs) - 1, len(col_divs) - 1), dtype=type(mat))
+    for i, (rs, re) in enumerate(zip(row_divs[:-1], row_divs[1:])):
+        for j, (cs, ce) in enumerate(zip(col_divs[:-1], col_divs[1:])):
+            mat_of_mats[i, j] = mat[rs:re, cs:ce]
+
+    return mat_of_mats
 
 
 def my_expit(x):
@@ -222,7 +256,7 @@ class LR_IRLS():
             Rinv = 1.0 / np.maximum(R, eps)
             z = sparse_dot(X, w_new) - Rinv * (mu - y)
             b = sparse_dot(X.T, R * z)
-            A = sparse_dot(X.T * dia_matrix((R,0),shape=(R.shape[0],R.shape[0]),copy=False), X) + self.reg * np.eye(n_features)
+            A = sparse_dot(X.T * sparse.dia_matrix((R,0),shape=(R.shape[0],R.shape[0]),copy=False), X) + self.reg * np.eye(n_features)
 
             w_new = np.dot(np.linalg.pinv(A), b).A1 # Equivalent to np.asarray(x).ravel()
 
@@ -230,7 +264,7 @@ class LR_IRLS():
             loss_history.append(criterion)
             if self.verbose > 1: print "iter: %r criterion = %r" % (it, criterion)
             if criterion < self.tol:
-                print "stop at iter %d.\n" % it
+                print "stop at iter %d." % it
                 reach_max_iter = False
                 break
 
@@ -239,7 +273,7 @@ class LR_IRLS():
         self.coef_ = w_new[:-1]
         self.intercept_ = w_new[-1]
         if self.save:
-            print "saving my Logistic Regression model...\n"
+            print "saving my Logistic Regression model..."
             dump(self, "LR_IRLS.model")
         return loss_history
 
@@ -266,9 +300,46 @@ class LR_IRLS():
 
         if y is not None:
             accuracy = 100 * np.mean(y_predict == y)
-            print "accuracy of my IRLS: %.2f" % accuracy
+            print "accuracy of my IRLS: %.2f\n" % accuracy
 
         return y_predict
+
+    def cross_val_score(self, X, y, num_folds=10):
+        self.save = False
+        print "reg = %f" % self.reg
+        num_samples = X.shape[0]
+        orders = np.random.permutation(num_samples)
+        Neach_fold, extras =divmod(num_samples, num_folds)
+        fold_sizes = (extras * [Neach_fold+1] + (num_folds-extras) * [Neach_fold])
+        div_points = np.array(fold_sizes)[:-1].cumsum().tolist()
+        X_folds = sparse_split(X[orders], div_points)
+        y_folds = np.array_split(y[orders], div_points)
+
+        train_acc = np.empty(num_folds)
+        val_acc = np.empty(num_folds)
+        for i in range(num_folds):
+            print "fold: %d" % (i+1)
+            fold_ix = range(num_folds); fold_ix.remove(i)
+            X_val = X_folds[i]
+            y_val = y_folds[i]
+            if num_folds == 1:
+                X_train = X_folds[0]
+                y_train = y_folds[0]
+            else:
+                X_train = sparse.vstack([X_folds[j] for j in fold_ix])
+                y_train = np.concatenate([y_folds[j] for j in fold_ix])
+
+            self.fit(X_train, y_train)
+            y_predict = self.predict(X_val, y_val)
+            val_acc[i] = np.mean(y_predict == y_val) # redundant calc acc
+            y_predict = self.predict(X_train, y_train)
+            train_acc[i] = np.mean(y_predict == y_train)
+
+        val_acc_mean = val_acc.mean()
+        train_acc_mean = train_acc.mean()
+        print "reg: %f train_acc_mean: %.2f val_acc_mean: %.2f\n" % (self.reg, 100*train_acc_mean, 100*val_acc_mean)
+        return val_acc_mean, train_acc_mean
+
 
 
 def LR_relu(X, y, maxiter=100, w_init=1, d=0.0001, tol=0.1):
@@ -446,11 +517,26 @@ if __name__ == "__main__":
     X_train, X_test = feature_augment(X_train, X_test)
     label_prep(y_train, y_test)
     check_train_test_consistent(X_train, X_test)
-
     manual_seed = 1996
+    # test fit and predict
     my_lr = LR_IRLS(reg=1.0, random_state=manual_seed, verbose=2)
     my_lr.fit(X_train, y_train)
     label = my_lr.predict(X_test, y_test)
+
+    # tune regularization strength
+    regs = [0.0, 0.001, 0.01, 0.1, 0.5, 1.0, 10.0, 100.0]
+    results = {}
+    best_acc = -1
+    best_lr = None
+    for reg in regs:
+        my_lr = LR_IRLS(reg=reg, random_state=manual_seed, verbose=2)
+        val_acc, train_acc = my_lr.cross_val_score(X_train, y_train, num_folds=10)
+        results[reg] = (train_acc, val_acc)
+        if val_acc > best_acc:
+            best_acc = val_acc
+            best_lr = my_lr
+    print "best validation accuracy achieved during cross-validation: %.2f" % (100*best_acc)
+
 
     plt.legend(loc="upper right")
     plt.xlabel("Proportion train")
