@@ -3,6 +3,8 @@ from scipy.sparse import issparse, csr_matrix, hstack, dia_matrix
 from scipy.special import expit
 from sklearn.externals.joblib import Memory, dump, load
 from sklearn.datasets import load_svmlight_file
+from sklearn.cross_validation import cross_val_score
+import matplotlib.pyplot as plt
 
 mem = Memory("./mycache")
 
@@ -205,13 +207,14 @@ class LR_IRLS():
             classes_ = classes_[1:]
 
         # Consider try different regs in parallel??
-        if self.verbose:
-            print "training my LR_IRLS model.."
+        if self.verbose > 0:
+            print "training my LR_IRLS model with regularization constant %.1f..." % self.reg
         w_new = np.zeros(n_features)
         # np.random.seed(self.random_state)
         # w_new = np.random.rand(n_features)
         eps = 1e-6
         reach_max_iter = True
+        loss_history = []
         for it in xrange(self.max_iter):
             w_old = w_new
             mu = expit(sparse_dot(X, w_new, dense_output=True))
@@ -221,10 +224,11 @@ class LR_IRLS():
             b = sparse_dot(X.T, R * z)
             A = sparse_dot(X.T * dia_matrix((R,0),shape=(R.shape[0],R.shape[0]),copy=False), X) + self.reg * np.eye(n_features)
 
-            w_new = np.dot(np.linalg.inv(A), b).A1 # Equivalent to np.asarray(x).ravel()
+            w_new = np.dot(np.linalg.pinv(A), b).A1 # Equivalent to np.asarray(x).ravel()
 
             criterion = np.sum(abs(w_new - w_old))
-            if self.verbose: print "iter: %r criterion = %r" % (it, criterion)
+            loss_history.append(criterion)
+            if self.verbose > 1: print "iter: %r criterion = %r" % (it, criterion)
             if criterion < self.tol:
                 print "stop at iter %d.\n" % it
                 reach_max_iter = False
@@ -237,7 +241,7 @@ class LR_IRLS():
         if self.save:
             print "saving my Logistic Regression model...\n"
             dump(self, "LR_IRLS.model")
-        return self
+        return loss_history
 
     def predict_proba(self, X):
         if not hasattr(self, "coef_"):
@@ -250,20 +254,21 @@ class LR_IRLS():
         else:
             raise ValueError("Mismatch X and w")
 
+        if self.verbose > 1:
+            print "L2-norm(w) = %r" % np.sum(w*w)
         score = sparse_dot(X, w, dense_output=True)  # (N,)
         prob = expit(score)
         return prob
 
     def predict(self, X, y=None):
         prob = self.predict_proba(X)
-        ret = np.round(prob)
+        y_predict = np.round(prob)
 
         if y is not None:
-            errcnt = np.sum(abs(ret - y)) # y in {0.0, 1.0}
-            accuracy = 100 * (1 - errcnt / y.shape[0])
+            accuracy = 100 * np.mean(y_predict == y)
             print "accuracy of my IRLS: %.2f" % accuracy
 
-        return ret
+        return y_predict
 
 
 def LR_relu(X, y, maxiter=100, w_init=1, d=0.0001, tol=0.1):
@@ -422,9 +427,8 @@ def sklearn_LR(X_train, y_train, X_test, y_test):
     print "l1-norm of optim state log-likelihood func's gradient: %r" % np.sum(np.abs(grad))
 
     # predict label of X_test
-    label = lr.predict(X_test)
-    errcnt = np.sum(abs(label - y_test) / 2)  # y in {-1.0, +1.0}
-    accuracy = 100 * (1 - errcnt / y_test.shape[0])
+    y_predict = lr.predict(X_test) # y in {-1.0, +1.0}
+    accuracy =100 * np.mean(y_predict == y_test)
     print "accuracy of sklearn.linear_model.LogisticRegression: %.2f\n" % accuracy
 
 
@@ -442,10 +446,33 @@ if __name__ == "__main__":
     X_train, X_test = feature_augment(X_train, X_test)
     label_prep(y_train, y_test)
     check_train_test_consistent(X_train, X_test)
+
     manual_seed = 1996
-    my_lr = LR_IRLS(random_state=manual_seed, verbose=1)
+    my_lr = LR_IRLS(reg=1.0, random_state=manual_seed, verbose=2)
     my_lr.fit(X_train, y_train)
     label = my_lr.predict(X_test, y_test)
+
+    plt.legend(loc="upper right")
+    plt.xlabel("Proportion train")
+    plt.ylabel("Test Error Rate")
+    plt.show()
+
+
+
+    """
+    # try preprocess feature by scaling to unit variance before regression, however get the same acc, futile...
+    # with regularization, it's recommended to standardize data in preprocessing??
+    # feature distribution not like gaussian, do not make sense??
+    from sklearn import preprocessing
+    # with_mean = False to keep sparsity
+    X_train_scaled = preprocessing.scale(X_train, axis=0, with_mean=False, with_std=True, copy=True)
+    X_test_scaled = preprocessing.scale(X_test, axis=0, with_mean=False, with_std=True, copy=True)
+    manual_seed = 1996
+    my_lr = LR_IRLS(random_state=manual_seed, verbose=1)
+    my_lr.fit(X_train_scaled, y_train)
+    label = my_lr.predict(X_test_scaled, y_test)
+    """
+
 
     """
     # reuse trained LR_IRLS.model
