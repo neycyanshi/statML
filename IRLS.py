@@ -544,7 +544,6 @@ if __name__ == "__main__":
     plt.show()
 
 
-
     """
     # try preprocess feature by scaling to unit variance before regression, however get the same acc, futile...
     # with regularization, it's recommended to standardize data in preprocessing??
