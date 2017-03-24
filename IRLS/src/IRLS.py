@@ -5,7 +5,7 @@ from sklearn.externals.joblib import Memory, dump, load
 from sklearn.datasets import load_svmlight_file
 import matplotlib.pyplot as plt
 
-mem = Memory("./mycache")
+mem = Memory("../mycache")
 
 
 @mem.cache  # decorator: get_data = mem.cache(get_data)
@@ -274,7 +274,7 @@ class LR_IRLS():
         self.intercept_ = w_new[-1]
         if self.save:
             print "saving my Logistic Regression model..."
-            dump(self, "LR_IRLS.model")
+            dump(self, "../model/LR_IRLS.model")
         return criterion_hist
 
     def predict_proba(self, X):
@@ -512,8 +512,8 @@ def sklearn_LR(X_train, y_train, X_test, y_test):
 
 
 if __name__ == "__main__":
-    train_name = 'a9a/a9a'
-    test_name = 'a9a/a9a.t'
+    train_name = '../a9a/a9a'
+    test_name = '../a9a/a9a.t'
     X_train, y_train = get_data(train_name)  # (32561, 123), (32561,)
     X_test, y_test = get_data(test_name)  # (16281, 122), (16281,)
 
