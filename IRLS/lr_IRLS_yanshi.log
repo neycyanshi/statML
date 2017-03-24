@@ -1,0 +1,919 @@
+training model from sklearn.linear_model.LogisticRegression.
+L1-norm of optim state log-likelihood func's gradient: 342352.71202996932
+L2-norm(w) = 38.104760046943625
+accuracy of sklearn.linear_model.LogisticRegression: 84.98
+
+augmenting input feature vector to [x, 1] ...
+changing label -1 to 0.0 ...
+X_train and X_test are consistent.
+reg: 0.001000 fold: 1
+training my LR_IRLS model with regularization constant 0.0...
+iter: 0 criterion = 25.265801073403182
+iter: 1 criterion = 17.711120781019591
+iter: 2 criterion = 15.917497663517864
+iter: 3 criterion = 12.828221163488438
+iter: 4 criterion = 8.2284900926228079
+iter: 5 criterion = 5.6874830531352893
+iter: 6 criterion = 4.3513049479614789
+iter: 7 criterion = 2.5728330540737412
+iter: 8 criterion = 0.99523874946437374
+iter: 9 criterion = 0.20862327175279294
+iter: 10 criterion = 0.0097430745493642945
+iter: 11 criterion = 2.0277006580471379e-05
+stop at iter 11.
+L2-norm(w) = 160.33482467957285
+accuracy of my IRLS: 84.03
+
+L2-norm(w) = 160.33482467957285
+accuracy of my IRLS: 85.02
+
+reg: 0.001000 fold: 2
+training my LR_IRLS model with regularization constant 0.0...
+iter: 0 criterion = 25.622241359803898
+iter: 1 criterion = 18.612950232108147
+iter: 2 criterion = 17.309713227781515
+iter: 3 criterion = 13.894395067736788
+iter: 4 criterion = 9.1310036179304781
+iter: 5 criterion = 6.3730703559209241
+iter: 6 criterion = 5.0163177915588797
+iter: 7 criterion = 3.6581080476655279
+iter: 8 criterion = 2.1971381440452369
+iter: 9 criterion = 0.87699533961117293
+iter: 10 criterion = 0.14852219128083988
+iter: 11 criterion = 0.0047004740463023609
+iter: 12 criterion = 1.7437608983428277e-06
+stop at iter 12.
+L2-norm(w) = 214.63632264939716
+accuracy of my IRLS: 84.74
+
+L2-norm(w) = 214.63632264939716
+accuracy of my IRLS: 84.91
+
+reg: 0.001000 fold: 3
+training my LR_IRLS model with regularization constant 0.0...
+iter: 0 criterion = 25.214767775435668
+iter: 1 criterion = 17.642343279080283
+iter: 2 criterion = 16.237811192915625
+iter: 3 criterion = 13.596074355024006
+iter: 4 criterion = 9.6640245030645993
+iter: 5 criterion = 6.895502327033781
+iter: 6 criterion = 4.9426416494961645
+iter: 7 criterion = 2.7701010229613008
+iter: 8 criterion = 1.0510991472169158
+iter: 9 criterion = 0.23104729835369664
+iter: 10 criterion = 0.012052643043496403
+iter: 11 criterion = 3.0436450859205877e-05
+stop at iter 11.
+L2-norm(w) = 187.88208496180954
+accuracy of my IRLS: 85.29
+
+L2-norm(w) = 187.88208496180954
+accuracy of my IRLS: 84.90
+
+reg: 0.001000 fold: 4
+training my LR_IRLS model with regularization constant 0.0...
+iter: 0 criterion = 24.893367321942286
+iter: 1 criterion = 17.617759162478986
+iter: 2 criterion = 16.8325837395112
+iter: 3 criterion = 13.88698689655876
+iter: 4 criterion = 9.0727056054338533
+iter: 5 criterion = 6.0728588935424916
+iter: 6 criterion = 4.3495210425298163
+iter: 7 criterion = 2.5062897913639697
+iter: 8 criterion = 0.95080506084505689
+iter: 9 criterion = 0.186135018864376
+iter: 10 criterion = 0.0076323987963116124
+iter: 11 criterion = 1.2602299898745173e-05
+stop at iter 11.
+L2-norm(w) = 161.32657629675452
+accuracy of my IRLS: 84.31
+
+L2-norm(w) = 161.32657629675452
+accuracy of my IRLS: 85.05
+
+reg: 0.001000 fold: 5
+training my LR_IRLS model with regularization constant 0.0...
+iter: 0 criterion = 25.788913114399925
+iter: 1 criterion = 18.199479339096818
+iter: 2 criterion = 17.077267942026772
+iter: 3 criterion = 13.949850423387543
+iter: 4 criterion = 9.1778832607619414
+iter: 5 criterion = 6.1342873479381641
+iter: 6 criterion = 4.3780054589100246
+iter: 7 criterion = 2.5399101440807081
+iter: 8 criterion = 1.0052647620560711
+iter: 9 criterion = 0.2230217806918624
+iter: 10 criterion = 0.011268015211875593
+iter: 11 criterion = 2.6135278403671691e-05
+stop at iter 11.
+L2-norm(w) = 173.04673546603217
+accuracy of my IRLS: 84.28
+
+L2-norm(w) = 173.04673546603217
+accuracy of my IRLS: 85.00
+
+reg: 0.001000 fold: 6
+training my LR_IRLS model with regularization constant 0.0...
+iter: 0 criterion = 25.865940509955351
+iter: 1 criterion = 18.030831370158687
+iter: 2 criterion = 16.607681681347447
+iter: 3 criterion = 13.247652333184313
+iter: 4 criterion = 8.7167215331910768
+iter: 5 criterion = 6.0514249194623053
+iter: 6 criterion = 4.4456255897832007
+iter: 7 criterion = 2.6165780515225716
+iter: 8 criterion = 1.0069921466164828
+iter: 9 criterion = 0.20637086985002284
+iter: 10 criterion = 0.009480787074164887
+iter: 11 criterion = 1.9577883504595661e-05
+stop at iter 11.
+L2-norm(w) = 170.75306967066359
+accuracy of my IRLS: 84.31
+
+L2-norm(w) = 170.75306967066359
+accuracy of my IRLS: 85.01
+
+reg: 0.001000 fold: 7
+training my LR_IRLS model with regularization constant 0.0...
+iter: 0 criterion = 25.610816722215098
+iter: 1 criterion = 17.969006349564388
+iter: 2 criterion = 16.049509122821142
+iter: 3 criterion = 12.68744949002477
+iter: 4 criterion = 8.5832864577399359
+iter: 5 criterion = 6.0899018135018892
+iter: 6 criterion = 4.4807738886425295
+iter: 7 criterion = 2.5870193201471778
+iter: 8 criterion = 0.974432833435114
+iter: 9 criterion = 0.19877740328742322
+iter: 10 criterion = 0.0088738298109007907
+iter: 11 criterion = 1.7141154107225276e-05
+stop at iter 11.
+L2-norm(w) = 158.49555810031288
+accuracy of my IRLS: 85.01
+
+L2-norm(w) = 158.49555810031288
+accuracy of my IRLS: 84.92
+
+reg: 0.001000 fold: 8
+training my LR_IRLS model with regularization constant 0.0...
+iter: 0 criterion = 25.063526624872864
+iter: 1 criterion = 17.437757065855521
+iter: 2 criterion = 15.967738722490258
+iter: 3 criterion = 12.945029865231682
+iter: 4 criterion = 8.6150745471318153
+iter: 5 criterion = 5.8801392579922442
+iter: 6 criterion = 4.1689900933429724
+iter: 7 criterion = 2.3735457348133426
+iter: 8 criterion = 0.9538637633574405
+iter: 9 criterion = 0.20995663399919451
+iter: 10 criterion = 0.0099277525119969567
+iter: 11 criterion = 2.073279681091833e-05
+stop at iter 11.
+L2-norm(w) = 162.9145468004954
+accuracy of my IRLS: 85.44
+
+L2-norm(w) = 162.9145468004954
+accuracy of my IRLS: 84.84
+
+reg: 0.001000 fold: 9
+training my LR_IRLS model with regularization constant 0.0...
+iter: 0 criterion = 26.008103282337544
+iter: 1 criterion = 18.56634592450381
+iter: 2 criterion = 17.144062412813057
+iter: 3 criterion = 14.325549688059104
+iter: 4 criterion = 9.6076021732421033
+iter: 5 criterion = 6.1833290869711623
+iter: 6 criterion = 4.3583886593725403
+iter: 7 criterion = 2.4684526551736141
+iter: 8 criterion = 0.92780271953351523
+iter: 9 criterion = 0.18268919473102319
+iter: 10 criterion = 0.0074155771709181195
+iter: 11 criterion = 1.0805253801038361e-05
+stop at iter 11.
+L2-norm(w) = 195.57999601519623
+accuracy of my IRLS: 85.01
+
+L2-norm(w) = 195.57999601519623
+accuracy of my IRLS: 84.88
+
+reg: 0.001000 fold: 10
+training my LR_IRLS model with regularization constant 0.0...
+iter: 0 criterion = 25.392766915429767
+iter: 1 criterion = 17.549739694280067
+iter: 2 criterion = 16.096556990556518
+iter: 3 criterion = 13.344941107245941
+iter: 4 criterion = 8.9986201043036171
+iter: 5 criterion = 6.1156046905748891
+iter: 6 criterion = 4.4000390834768002
+iter: 7 criterion = 2.549027449482077
+iter: 8 criterion = 0.9821696657162482
+iter: 9 criterion = 0.20387485320885279
+iter: 10 criterion = 0.0092881409740925847
+iter: 11 criterion = 1.8389721889278121e-05
+stop at iter 11.
+L2-norm(w) = 165.5776615175516
+accuracy of my IRLS: 85.14
+
+L2-norm(w) = 165.5776615175516
+accuracy of my IRLS: 84.91
+
+cross-validation done. reg: 0.001000 train_acc_mean: 84.94 val_acc_mean: 84.75
+
+
+reg: 0.100000 fold: 1
+training my LR_IRLS model with regularization constant 0.1...
+iter: 0 criterion = 25.153960825711469
+iter: 1 criterion = 17.45209816373232
+iter: 2 criterion = 15.118190567555299
+iter: 3 criterion = 10.629534250232917
+iter: 4 criterion = 4.2578689041800448
+iter: 5 criterion = 0.71793094532339219
+iter: 6 criterion = 0.026716055348473322
+iter: 7 criterion = 5.2433488887393409e-05
+stop at iter 7.
+L2-norm(w) = 62.942745326090069
+accuracy of my IRLS: 84.89
+
+L2-norm(w) = 62.942745326090069
+accuracy of my IRLS: 84.93
+
+reg: 0.100000 fold: 2
+training my LR_IRLS model with regularization constant 0.1...
+iter: 0 criterion = 25.053352581350698
+iter: 1 criterion = 17.776695350767113
+iter: 2 criterion = 15.155745851848412
+iter: 3 criterion = 10.829453886957122
+iter: 4 criterion = 4.5243011065215226
+iter: 5 criterion = 0.74995341734306975
+iter: 6 criterion = 0.026127436849037733
+iter: 7 criterion = 4.7769614729187282e-05
+stop at iter 7.
+L2-norm(w) = 65.019628385284506
+accuracy of my IRLS: 85.38
+
+L2-norm(w) = 65.019628385284506
+accuracy of my IRLS: 84.85
+
+reg: 0.100000 fold: 3
+training my LR_IRLS model with regularization constant 0.1...
+iter: 0 criterion = 24.089095165389715
+iter: 1 criterion = 17.182594550436328
+iter: 2 criterion = 15.016536988290369
+iter: 3 criterion = 10.316656885455398
+iter: 4 criterion = 4.0491572006415613
+iter: 5 criterion = 0.65985846191118958
+iter: 6 criterion = 0.021225285138555483
+iter: 7 criterion = 2.7993884971655447e-05
+stop at iter 7.
+L2-norm(w) = 59.658830685941211
+accuracy of my IRLS: 84.71
+
+L2-norm(w) = 59.658830685941211
+accuracy of my IRLS: 84.98
+
+reg: 0.100000 fold: 4
+training my LR_IRLS model with regularization constant 0.1...
+iter: 0 criterion = 26.326948524945095
+iter: 1 criterion = 17.993393104006515
+iter: 2 criterion = 15.508768657407977
+iter: 3 criterion = 10.808525984556034
+iter: 4 criterion = 4.2838753307362163
+iter: 5 criterion = 0.72869765293829758
+iter: 6 criterion = 0.025703952041438383
+iter: 7 criterion = 4.2441600483167363e-05
+stop at iter 7.
+L2-norm(w) = 65.891662555562135
+accuracy of my IRLS: 85.23
+
+L2-norm(w) = 65.891662555562135
+accuracy of my IRLS: 84.89
+
+reg: 0.100000 fold: 5
+training my LR_IRLS model with regularization constant 0.1...
+iter: 0 criterion = 25.344670629185003
+iter: 1 criterion = 17.817638000899795
+iter: 2 criterion = 15.499145044550858
+iter: 3 criterion = 11.22319187445896
+iter: 4 criterion = 5.2129127178902728
+iter: 5 criterion = 1.4706701180727049
+iter: 6 criterion = 0.20385280477708068
+iter: 7 criterion = 0.0063477207225550725
+iter: 8 criterion = 7.2753763433741625e-06
+stop at iter 8.
+L2-norm(w) = 69.830116434754345
+accuracy of my IRLS: 84.95
+
+L2-norm(w) = 69.830116434754345
+accuracy of my IRLS: 84.95
+
+reg: 0.100000 fold: 6
+training my LR_IRLS model with regularization constant 0.1...
+iter: 0 criterion = 25.379438587387448
+iter: 1 criterion = 17.006309779210145
+iter: 2 criterion = 14.791764159878859
+iter: 3 criterion = 10.108304639039803
+iter: 4 criterion = 4.0646915182418599
+iter: 5 criterion = 0.71746838956671999
+iter: 6 criterion = 0.027174026254921824
+iter: 7 criterion = 5.2036564594626356e-05
+stop at iter 7.
+L2-norm(w) = 58.408460928532705
+accuracy of my IRLS: 84.00
+
+L2-norm(w) = 58.408460928532705
+accuracy of my IRLS: 85.01
+
+reg: 0.100000 fold: 7
+training my LR_IRLS model with regularization constant 0.1...
+iter: 0 criterion = 26.078265593213597
+iter: 1 criterion = 17.881895087486029
+iter: 2 criterion = 15.610172228769592
+iter: 3 criterion = 10.6441415727324
+iter: 4 criterion = 4.0891455439648592
+iter: 5 criterion = 0.67160515400149046
+iter: 6 criterion = 0.024062451840025201
+iter: 7 criterion = 4.4423103066071334e-05
+stop at iter 7.
+L2-norm(w) = 64.459787437488018
+accuracy of my IRLS: 84.86
+
+L2-norm(w) = 64.459787437488018
+accuracy of my IRLS: 85.01
+
+reg: 0.100000 fold: 8
+training my LR_IRLS model with regularization constant 0.1...
+iter: 0 criterion = 25.628993718881066
+iter: 1 criterion = 17.825350309753613
+iter: 2 criterion = 15.891330213893491
+iter: 3 criterion = 11.072758493094938
+iter: 4 criterion = 4.439835972388531
+iter: 5 criterion = 0.77094441238855338
+iter: 6 criterion = 0.028664611148194963
+iter: 7 criterion = 5.565282163377816e-05
+stop at iter 7.
+L2-norm(w) = 68.062395885222941
+accuracy of my IRLS: 85.26
+
+L2-norm(w) = 68.062395885222941
+accuracy of my IRLS: 84.91
+
+reg: 0.100000 fold: 9
+training my LR_IRLS model with regularization constant 0.1...
+iter: 0 criterion = 24.131272876389357
+iter: 1 criterion = 17.262621040064968
+iter: 2 criterion = 15.648742214029891
+iter: 3 criterion = 11.095757263665657
+iter: 4 criterion = 4.5515850550057309
+iter: 5 criterion = 0.81322742187546915
+iter: 6 criterion = 0.034181388484255448
+iter: 7 criterion = 8.8646757120836028e-05
+stop at iter 7.
+L2-norm(w) = 64.410080970806661
+accuracy of my IRLS: 84.21
+
+L2-norm(w) = 64.410080970806661
+accuracy of my IRLS: 85.03
+
+reg: 0.100000 fold: 10
+training my LR_IRLS model with regularization constant 0.1...
+iter: 0 criterion = 25.143210344102069
+iter: 1 criterion = 17.127153689563812
+iter: 2 criterion = 14.868704348914225
+iter: 3 criterion = 9.9947842400401221
+iter: 4 criterion = 3.8959942636330736
+iter: 5 criterion = 0.6706475201793316
+iter: 6 criterion = 0.025105843543048456
+iter: 7 criterion = 4.9025732451468684e-05
+stop at iter 7.
+L2-norm(w) = 59.746668265272042
+accuracy of my IRLS: 84.52
+
+L2-norm(w) = 59.746668265272042
+accuracy of my IRLS: 84.96
+
+cross-validation done. reg: 0.100000 train_acc_mean: 84.95 val_acc_mean: 84.80
+
+
+reg: 1.000000 fold: 1
+training my LR_IRLS model with regularization constant 1.0...
+iter: 0 criterion = 23.612118527352077
+iter: 1 criterion = 14.958514380721429
+iter: 2 criterion = 11.561525372917661
+iter: 3 criterion = 6.7801530700509005
+iter: 4 criterion = 2.0295641342051565
+iter: 5 criterion = 0.20617575773645258
+iter: 6 criterion = 0.0028834473640246133
+iter: 7 criterion = 7.5918066191199562e-07
+stop at iter 7.
+L2-norm(w) = 37.992949627454038
+accuracy of my IRLS: 85.35
+
+L2-norm(w) = 37.992949627454038
+accuracy of my IRLS: 84.88
+
+reg: 1.000000 fold: 2
+training my LR_IRLS model with regularization constant 1.0...
+iter: 0 criterion = 23.670630720173158
+iter: 1 criterion = 15.398652328908932
+iter: 2 criterion = 11.77918763738491
+iter: 3 criterion = 6.6800362051699151
+iter: 4 criterion = 1.9135987626715303
+iter: 5 criterion = 0.19060352357695409
+iter: 6 criterion = 0.0027217006944034727
+iter: 7 criterion = 7.0488432779569621e-07
+stop at iter 7.
+L2-norm(w) = 38.155214027840451
+accuracy of my IRLS: 85.26
+
+L2-norm(w) = 38.155214027840451
+accuracy of my IRLS: 84.93
+
+reg: 1.000000 fold: 3
+training my LR_IRLS model with regularization constant 1.0...
+iter: 0 criterion = 24.121382780317688
+iter: 1 criterion = 14.82315360400173
+iter: 2 criterion = 11.610146029609297
+iter: 3 criterion = 6.7212550359605618
+iter: 4 criterion = 2.0562286692261518
+iter: 5 criterion = 0.23833920844023179
+iter: 6 criterion = 0.0044446845844408056
+iter: 7 criterion = 1.939846862392125e-06
+stop at iter 7.
+L2-norm(w) = 38.265322123123035
+accuracy of my IRLS: 84.31
+
+L2-norm(w) = 38.265322123123035
+accuracy of my IRLS: 84.98
+
+reg: 1.000000 fold: 4
+training my LR_IRLS model with regularization constant 1.0...
+iter: 0 criterion = 23.355291249853266
+iter: 1 criterion = 15.445267212795926
+iter: 2 criterion = 12.083223762823287
+iter: 3 criterion = 6.7737622347828585
+iter: 4 criterion = 1.9341855125455893
+iter: 5 criterion = 0.18952964687830998
+iter: 6 criterion = 0.0026688898164712871
+iter: 7 criterion = 6.959891465374568e-07
+stop at iter 7.
+L2-norm(w) = 37.63314237577336
+accuracy of my IRLS: 85.20
+
+L2-norm(w) = 37.63314237577336
+accuracy of my IRLS: 84.89
+
+reg: 1.000000 fold: 5
+training my LR_IRLS model with regularization constant 1.0...
+iter: 0 criterion = 23.602373704923231
+iter: 1 criterion = 15.195559180674543
+iter: 2 criterion = 11.86789713464375
+iter: 3 criterion = 6.6891775776137257
+iter: 4 criterion = 1.9935414992084162
+iter: 5 criterion = 0.22620550451827789
+iter: 6 criterion = 0.004122995837723048
+iter: 7 criterion = 1.7573576897578214e-06
+stop at iter 7.
+L2-norm(w) = 39.071997845667461
+accuracy of my IRLS: 85.04
+
+L2-norm(w) = 39.071997845667461
+accuracy of my IRLS: 84.95
+
+reg: 1.000000 fold: 6
+training my LR_IRLS model with regularization constant 1.0...
+iter: 0 criterion = 23.896918307574264
+iter: 1 criterion = 15.266884110033455
+iter: 2 criterion = 11.729988685846417
+iter: 3 criterion = 6.7033478662241492
+iter: 4 criterion = 2.0760045723230398
+iter: 5 criterion = 0.23857228536906047
+iter: 6 criterion = 0.0044815187995725647
+iter: 7 criterion = 1.9578676905551706e-06
+stop at iter 7.
+L2-norm(w) = 38.343199412833762
+accuracy of my IRLS: 84.18
+
+L2-norm(w) = 38.343199412833762
+accuracy of my IRLS: 85.01
+
+reg: 1.000000 fold: 7
+training my LR_IRLS model with regularization constant 1.0...
+iter: 0 criterion = 23.489727901559043
+iter: 1 criterion = 14.955530130203172
+iter: 2 criterion = 11.680260605639685
+iter: 3 criterion = 6.5914774531612483
+iter: 4 criterion = 1.9889724971895881
+iter: 5 criterion = 0.21204186961601562
+iter: 6 criterion = 0.0033363000839536083
+iter: 7 criterion = 1.0547348335276929e-06
+stop at iter 7.
+L2-norm(w) = 37.696714244319438
+accuracy of my IRLS: 84.74
+
+L2-norm(w) = 37.696714244319438
+accuracy of my IRLS: 84.95
+
+reg: 1.000000 fold: 8
+training my LR_IRLS model with regularization constant 1.0...
+iter: 0 criterion = 23.88344171168599
+iter: 1 criterion = 14.982584671113532
+iter: 2 criterion = 11.450209549453266
+iter: 3 criterion = 6.5965281954976236
+iter: 4 criterion = 1.9873587535634232
+iter: 5 criterion = 0.21889972386869788
+iter: 6 criterion = 0.0037089476506123875
+iter: 7 criterion = 1.340198217708588e-06
+stop at iter 7.
+L2-norm(w) = 38.014409470593712
+accuracy of my IRLS: 84.95
+
+L2-norm(w) = 38.014409470593712
+accuracy of my IRLS: 84.85
+
+reg: 1.000000 fold: 9
+training my LR_IRLS model with regularization constant 1.0...
+iter: 0 criterion = 24.188038098232923
+iter: 1 criterion = 15.668451974080101
+iter: 2 criterion = 11.864529181590914
+iter: 3 criterion = 6.7096973467179701
+iter: 4 criterion = 1.9229128796547597
+iter: 5 criterion = 0.19841040940884136
+iter: 6 criterion = 0.0029876332511639125
+iter: 7 criterion = 8.7019911704233621e-07
+stop at iter 7.
+L2-norm(w) = 38.743108521632315
+accuracy of my IRLS: 84.74
+
+L2-norm(w) = 38.743108521632315
+accuracy of my IRLS: 84.99
+
+reg: 1.000000 fold: 10
+training my LR_IRLS model with regularization constant 1.0...
+iter: 0 criterion = 23.393522178105734
+iter: 1 criterion = 15.141985428181492
+iter: 2 criterion = 11.853573988446023
+iter: 3 criterion = 6.6586228255752582
+iter: 4 criterion = 2.0024718528580805
+iter: 5 criterion = 0.2264918465966369
+iter: 6 criterion = 0.0040831733274293291
+iter: 7 criterion = 1.697175590925637e-06
+stop at iter 7.
+L2-norm(w) = 37.911998825651011
+accuracy of my IRLS: 85.07
+
+L2-norm(w) = 37.911998825651011
+accuracy of my IRLS: 84.87
+
+cross-validation done. reg: 1.000000 train_acc_mean: 84.93 val_acc_mean: 84.88
+
+
+reg: 10.000000 fold: 1
+training my LR_IRLS model with regularization constant 10.0...
+iter: 0 criterion = 18.642225377312975
+iter: 1 criterion = 10.334677355391852
+iter: 2 criterion = 6.9304916386271715
+iter: 3 criterion = 3.3086613191090279
+iter: 4 criterion = 0.83700505569119643
+iter: 5 criterion = 0.06740824538320446
+iter: 6 criterion = 0.00051680240578949252
+iter: 7 criterion = 3.2857422688908899e-08
+stop at iter 7.
+L2-norm(w) = 20.891518827123402
+accuracy of my IRLS: 85.54
+
+L2-norm(w) = 20.891518827123402
+accuracy of my IRLS: 84.73
+
+reg: 10.000000 fold: 2
+training my LR_IRLS model with regularization constant 10.0...
+iter: 0 criterion = 19.172342402195628
+iter: 1 criterion = 10.341059142535238
+iter: 2 criterion = 6.95258392437262
+iter: 3 criterion = 3.38214240012669
+iter: 4 criterion = 0.84153905456631461
+iter: 5 criterion = 0.066963653646531715
+iter: 6 criterion = 0.00051192946204188169
+iter: 7 criterion = 3.2436754102138643e-08
+stop at iter 7.
+L2-norm(w) = 21.157967638353767
+accuracy of my IRLS: 84.83
+
+L2-norm(w) = 21.157967638353767
+accuracy of my IRLS: 84.86
+
+reg: 10.000000 fold: 3
+training my LR_IRLS model with regularization constant 10.0...
+iter: 0 criterion = 19.233998434596348
+iter: 1 criterion = 10.25352432482547
+iter: 2 criterion = 6.8679618200530568
+iter: 3 criterion = 3.3423688217332774
+iter: 4 criterion = 0.8341221199036255
+iter: 5 criterion = 0.065423665904620981
+iter: 6 criterion = 0.00048207851274504818
+iter: 7 criterion = 2.8496814854887809e-08
+stop at iter 7.
+L2-norm(w) = 21.276193268732094
+accuracy of my IRLS: 84.46
+
+L2-norm(w) = 21.276193268732094
+accuracy of my IRLS: 84.92
+
+reg: 10.000000 fold: 4
+training my LR_IRLS model with regularization constant 10.0...
+iter: 0 criterion = 18.629372628773353
+iter: 1 criterion = 10.172470732097525
+iter: 2 criterion = 6.8099048677064271
+iter: 3 criterion = 3.2493649072351225
+iter: 4 criterion = 0.81659290839003307
+iter: 5 criterion = 0.06397356842824764
+iter: 6 criterion = 0.00046095189154341659
+iter: 7 criterion = 2.5847932121070283e-08
+stop at iter 7.
+L2-norm(w) = 20.813237089180863
+accuracy of my IRLS: 85.47
+
+L2-norm(w) = 20.813237089180863
+accuracy of my IRLS: 84.75
+
+reg: 10.000000 fold: 5
+training my LR_IRLS model with regularization constant 10.0...
+iter: 0 criterion = 18.489600980482482
+iter: 1 criterion = 9.95633434245185
+iter: 2 criterion = 6.8695378552149275
+iter: 3 criterion = 3.3251424672825483
+iter: 4 criterion = 0.8281916502952672
+iter: 5 criterion = 0.066171716016526147
+iter: 6 criterion = 0.00050285701706055674
+iter: 7 criterion = 3.1277277906527345e-08
+stop at iter 7.
+L2-norm(w) = 20.43011029911349
+accuracy of my IRLS: 84.61
+
+L2-norm(w) = 20.43011029911349
+accuracy of my IRLS: 84.85
+
+reg: 10.000000 fold: 6
+training my LR_IRLS model with regularization constant 10.0...
+iter: 0 criterion = 18.794763346865007
+iter: 1 criterion = 10.245818233130034
+iter: 2 criterion = 6.9613846719984078
+iter: 3 criterion = 3.3834012975267433
+iter: 4 criterion = 0.8558593944437668
+iter: 5 criterion = 0.069555263508308485
+iter: 6 criterion = 0.00053983590864944628
+iter: 7 criterion = 3.5396929975659019e-08
+stop at iter 7.
+L2-norm(w) = 21.027640320394696
+accuracy of my IRLS: 84.52
+
+L2-norm(w) = 21.027640320394696
+accuracy of my IRLS: 84.90
+
+reg: 10.000000 fold: 7
+training my LR_IRLS model with regularization constant 10.0...
+iter: 0 criterion = 18.830135293185375
+iter: 1 criterion = 10.244477923227045
+iter: 2 criterion = 6.9301475632356997
+iter: 3 criterion = 3.4003918138067784
+iter: 4 criterion = 0.85817797574122445
+iter: 5 criterion = 0.07020139587417884
+iter: 6 criterion = 0.00057004757158660505
+iter: 7 criterion = 4.1501045766612066e-08
+stop at iter 7.
+L2-norm(w) = 20.990250910568179
+accuracy of my IRLS: 83.97
+
+L2-norm(w) = 20.990250910568179
+accuracy of my IRLS: 84.91
+
+reg: 10.000000 fold: 8
+training my LR_IRLS model with regularization constant 10.0...
+iter: 0 criterion = 18.916374911929267
+iter: 1 criterion = 10.215401488312692
+iter: 2 criterion = 6.9023766130594328
+iter: 3 criterion = 3.3333037676193387
+iter: 4 criterion = 0.86161406936311924
+iter: 5 criterion = 0.073042342002343483
+iter: 6 criterion = 0.00062071057984604966
+iter: 7 criterion = 4.8692215925960625e-08
+stop at iter 7.
+L2-norm(w) = 21.212145306677428
+accuracy of my IRLS: 84.49
+
+L2-norm(w) = 21.212145306677428
+accuracy of my IRLS: 84.88
+
+reg: 10.000000 fold: 9
+training my LR_IRLS model with regularization constant 10.0...
+iter: 0 criterion = 19.03692966577912
+iter: 1 criterion = 10.199880345638975
+iter: 2 criterion = 6.9487057782581605
+iter: 3 criterion = 3.3747182518178973
+iter: 4 criterion = 0.84681381410454737
+iter: 5 criterion = 0.068437589354738149
+iter: 6 criterion = 0.0005276658627622853
+iter: 7 criterion = 3.3954311416325988e-08
+stop at iter 7.
+L2-norm(w) = 21.197124782919911
+accuracy of my IRLS: 85.17
+
+L2-norm(w) = 21.197124782919911
+accuracy of my IRLS: 84.83
+
+reg: 10.000000 fold: 10
+training my LR_IRLS model with regularization constant 10.0...
+iter: 0 criterion = 19.08692595506902
+iter: 1 criterion = 10.184987885640901
+iter: 2 criterion = 6.8135095419680924
+iter: 3 criterion = 3.3354264953939143
+iter: 4 criterion = 0.85782516518439833
+iter: 5 criterion = 0.071445552632108972
+iter: 6 criterion = 0.00058385725234868027
+iter: 7 criterion = 4.2525333136811394e-08
+stop at iter 7.
+L2-norm(w) = 20.992319918763194
+accuracy of my IRLS: 84.80
+
+L2-norm(w) = 20.992319918763194
+accuracy of my IRLS: 84.82
+
+cross-validation done. reg: 10.000000 train_acc_mean: 84.84 val_acc_mean: 84.79
+
+
+reg: 100.000000 fold: 1
+training my LR_IRLS model with regularization constant 100.0...
+iter: 0 criterion = 13.27208199347363
+iter: 1 criterion = 5.8459947280400879
+iter: 2 criterion = 3.1362073419105694
+iter: 3 criterion = 0.96162980731654546
+iter: 4 criterion = 0.089527867188190446
+iter: 5 criterion = 0.00080621686241569681
+iter: 6 criterion = 7.1023526760759931e-08
+stop at iter 6.
+L2-norm(w) = 9.9584683034468604
+accuracy of my IRLS: 84.40
+
+L2-norm(w) = 9.9584683034468604
+accuracy of my IRLS: 84.59
+
+reg: 100.000000 fold: 2
+training my LR_IRLS model with regularization constant 100.0...
+iter: 0 criterion = 13.407087162734824
+iter: 1 criterion = 5.8539875331755651
+iter: 2 criterion = 3.1625669493533239
+iter: 3 criterion = 0.99361323732555873
+iter: 4 criterion = 0.095250347294598456
+iter: 5 criterion = 0.00090122367954853858
+iter: 6 criterion = 8.7393145190191313e-08
+stop at iter 6.
+L2-norm(w) = 10.046217873907032
+accuracy of my IRLS: 84.55
+
+L2-norm(w) = 10.046217873907032
+accuracy of my IRLS: 84.56
+
+reg: 100.000000 fold: 3
+training my LR_IRLS model with regularization constant 100.0...
+iter: 0 criterion = 13.394313357479147
+iter: 1 criterion = 5.7776486683484167
+iter: 2 criterion = 3.1079562771177782
+iter: 3 criterion = 0.95654237318485835
+iter: 4 criterion = 0.088931827459836937
+iter: 5 criterion = 0.00079969766870172446
+iter: 6 criterion = 7.029680859855017e-08
+stop at iter 6.
+L2-norm(w) = 9.9021284822934188
+accuracy of my IRLS: 85.04
+
+L2-norm(w) = 9.9021284822934188
+accuracy of my IRLS: 84.51
+
+reg: 100.000000 fold: 4
+training my LR_IRLS model with regularization constant 100.0...
+iter: 0 criterion = 13.421934513431784
+iter: 1 criterion = 5.8035684815286812
+iter: 2 criterion = 3.1349132126953809
+iter: 3 criterion = 0.97836036991507425
+iter: 4 criterion = 0.092611751604949041
+iter: 5 criterion = 0.00085428866746843158
+iter: 6 criterion = 7.8992286757680052e-08
+stop at iter 6.
+L2-norm(w) = 10.022374026535648
+accuracy of my IRLS: 84.15
+
+L2-norm(w) = 10.022374026535648
+accuracy of my IRLS: 84.60
+
+reg: 100.000000 fold: 5
+training my LR_IRLS model with regularization constant 100.0...
+iter: 0 criterion = 13.242358219427569
+iter: 1 criterion = 5.8257125227152819
+iter: 2 criterion = 3.1588648882030288
+iter: 3 criterion = 0.99028118638928553
+iter: 4 criterion = 0.093907397089965899
+iter: 5 criterion = 0.00087511546172021793
+iter: 6 criterion = 8.2669949269065322e-08
+stop at iter 6.
+L2-norm(w) = 9.9377130982575483
+accuracy of my IRLS: 84.52
+
+L2-norm(w) = 9.9377130982575483
+accuracy of my IRLS: 84.54
+
+reg: 100.000000 fold: 6
+training my LR_IRLS model with regularization constant 100.0...
+iter: 0 criterion = 13.262465498983197
+iter: 1 criterion = 5.8261410083081122
+iter: 2 criterion = 3.1655014672929411
+iter: 3 criterion = 0.98627273999821297
+iter: 4 criterion = 0.093740246575168662
+iter: 5 criterion = 0.00087199690908280544
+iter: 6 criterion = 8.2067237631468226e-08
+stop at iter 6.
+L2-norm(w) = 9.9496005484401788
+accuracy of my IRLS: 84.24
+
+L2-norm(w) = 9.9496005484401788
+accuracy of my IRLS: 84.57
+
+reg: 100.000000 fold: 7
+training my LR_IRLS model with regularization constant 100.0...
+iter: 0 criterion = 13.480644852842982
+iter: 1 criterion = 5.8335513390239582
+iter: 2 criterion = 3.1442714977673942
+iter: 3 criterion = 0.9775238539306832
+iter: 4 criterion = 0.092355207429939939
+iter: 5 criterion = 0.00085141060318493379
+iter: 6 criterion = 7.8474554952336073e-08
+stop at iter 6.
+L2-norm(w) = 10.063273857259698
+accuracy of my IRLS: 84.55
+
+L2-norm(w) = 10.063273857259698
+accuracy of my IRLS: 84.56
+
+reg: 100.000000 fold: 8
+training my LR_IRLS model with regularization constant 100.0...
+iter: 0 criterion = 13.383362846907755
+iter: 1 criterion = 5.7678653183583579
+iter: 2 criterion = 3.1128115589842733
+iter: 3 criterion = 0.97460542624063151
+iter: 4 criterion = 0.092396632115500546
+iter: 5 criterion = 0.00086001449077959197
+iter: 6 criterion = 8.0935834031320431e-08
+stop at iter 6.
+L2-norm(w) = 9.9064255738767351
+accuracy of my IRLS: 84.64
+
+L2-norm(w) = 9.9064255738767351
+accuracy of my IRLS: 84.53
+
+reg: 100.000000 fold: 9
+training my LR_IRLS model with regularization constant 100.0...
+iter: 0 criterion = 13.411830395328224
+iter: 1 criterion = 5.8398349457805718
+iter: 2 criterion = 3.1204759033914815
+iter: 3 criterion = 0.98025941772914515
+iter: 4 criterion = 0.093111343303157706
+iter: 5 criterion = 0.00086687228612452325
+iter: 6 criterion = 8.1390856165007575e-08
+stop at iter 6.
+L2-norm(w) = 10.029930504427323
+accuracy of my IRLS: 84.74
+
+L2-norm(w) = 10.029930504427323
+accuracy of my IRLS: 84.52
+
+reg: 100.000000 fold: 10
+training my LR_IRLS model with regularization constant 100.0...
+iter: 0 criterion = 13.265457408353901
+iter: 1 criterion = 5.8311741556648951
+iter: 2 criterion = 3.1651549123342653
+iter: 3 criterion = 0.9960984655603341
+iter: 4 criterion = 0.095919486587852126
+iter: 5 criterion = 0.00091589849013376566
+iter: 6 criterion = 9.0535640987626786e-08
+stop at iter 6.
+L2-norm(w) = 9.9590819785440559
+accuracy of my IRLS: 84.09
+
+L2-norm(w) = 9.9590819785440559
+accuracy of my IRLS: 84.61
+
+cross-validation done. reg: 100.000000 train_acc_mean: 84.56 val_acc_mean: 84.49
+
+
+best validation accuracy achieved during cross-validation: 84.88, reg = 1.000000
+training my LR_IRLS model with regularization constant 1.0...
+iter: 0 criterion = 23.464764947636144
+iter: 1 criterion = 15.168739426585859
+iter: 2 criterion = 11.806611734991213
+iter: 3 criterion = 6.8156733311256756
+iter: 4 criterion = 2.0429231905207397
+iter: 5 criterion = 0.21998961690222596
+iter: 6 criterion = 0.0035731501128758447
+iter: 7 criterion = 1.2262219295511301e-06
+stop at iter 7.
+L2-norm(w) = 38.232249863278376
+accuracy of my IRLS: 84.99
+
