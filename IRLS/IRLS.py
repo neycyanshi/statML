@@ -248,7 +248,7 @@ class LR_IRLS():
         # w_new = np.random.rand(n_features)
         eps = 1e-6
         reach_max_iter = True
-        loss_history = []
+        criterion_hist = []
         for it in xrange(self.max_iter):
             w_old = w_new
             mu = expit(sparse_dot(X, w_new, dense_output=True))
@@ -261,7 +261,7 @@ class LR_IRLS():
             w_new = np.dot(np.linalg.pinv(A), b).A1 # Equivalent to np.asarray(x).ravel()
 
             criterion = np.sum(abs(w_new - w_old))
-            loss_history.append(criterion)
+            criterion_hist.append(criterion)
             if self.verbose > 1: print "iter: %r criterion = %r" % (it, criterion)
             if criterion < self.tol:
                 print "stop at iter %d." % it
@@ -275,7 +275,7 @@ class LR_IRLS():
         if self.save:
             print "saving my Logistic Regression model..."
             dump(self, "LR_IRLS.model")
-        return loss_history
+        return criterion_hist
 
     def predict_proba(self, X):
         if not hasattr(self, "coef_"):
@@ -306,7 +306,6 @@ class LR_IRLS():
 
     def cross_val_score(self, X, y, num_folds=10):
         self.save = False
-        print "reg = %f" % self.reg
         num_samples = X.shape[0]
         orders = np.random.permutation(num_samples)
         Neach_fold, extras =divmod(num_samples, num_folds)
@@ -318,7 +317,7 @@ class LR_IRLS():
         train_acc = np.empty(num_folds)
         val_acc = np.empty(num_folds)
         for i in range(num_folds):
-            print "fold: %d" % (i+1)
+            print "reg: %f fold: %d" % (self.reg, i+1)
             fold_ix = range(num_folds); fold_ix.remove(i)
             X_val = X_folds[i]
             y_val = y_folds[i]
@@ -329,7 +328,7 @@ class LR_IRLS():
                 X_train = sparse.vstack([X_folds[j] for j in fold_ix])
                 y_train = np.concatenate([y_folds[j] for j in fold_ix])
 
-            self.fit(X_train, y_train)
+            criterion_hist = self.fit(X_train, y_train)
             y_predict = self.predict(X_val, y_val)
             val_acc[i] = np.mean(y_predict == y_val) # redundant calc acc
             y_predict = self.predict(X_train, y_train)
@@ -337,7 +336,13 @@ class LR_IRLS():
 
         val_acc_mean = val_acc.mean()
         train_acc_mean = train_acc.mean()
-        print "reg: %f train_acc_mean: %.2f val_acc_mean: %.2f\n" % (self.reg, 100*train_acc_mean, 100*val_acc_mean)
+        print "cross-validation done. reg: %f train_acc_mean: %.2f val_acc_mean: %.2f\n\n" % (self.reg, 100*train_acc_mean, 100*val_acc_mean)
+
+        # plot the last fold training loss history
+        plt.plot(criterion_hist, label=("reg={} val_acc=%.2f" % (100*val_acc_mean)).format(self.reg, val_acc_mean))
+        plt.xlabel('Iteration number')
+        plt.ylabel('criterion value')
+
         return val_acc_mean, train_acc_mean
 
 
@@ -492,10 +497,12 @@ def sklearn_LR(X_train, y_train, X_test, y_test):
     # check gradient == 0
     w0 = lr.coef_.ravel()
     b0 = lr.intercept_
+    w = np.hstack((w0, b0))
     mu = np.empty(X_train.shape[0])
     expit(X_train * w0 + b0, mu)
     grad = X_train.T * (y_train - mu)
-    print "l1-norm of optim state log-likelihood func's gradient: %r" % np.sum(np.abs(grad))
+    print "L1-norm of optim state log-likelihood func's gradient: %r" % np.sum(np.abs(grad))
+    print "L2-norm(w) = %r" % np.sum(w*w)
 
     # predict label of X_test
     y_predict = lr.predict(X_test) # y in {-1.0, +1.0}
@@ -518,13 +525,9 @@ if __name__ == "__main__":
     label_prep(y_train, y_test)
     check_train_test_consistent(X_train, X_test)
     manual_seed = 1996
-    # test fit and predict
-    my_lr = LR_IRLS(reg=1.0, random_state=manual_seed, verbose=2)
-    my_lr.fit(X_train, y_train)
-    label = my_lr.predict(X_test, y_test)
 
     # tune regularization strength
-    regs = [0.0, 0.001, 0.01, 0.1, 0.5, 1.0, 10.0, 100.0]
+    regs = [0.001, 0.1, 1.0, 10.0, 100.0]
     results = {}
     best_acc = -1
     best_lr = None
@@ -535,15 +538,17 @@ if __name__ == "__main__":
         if val_acc > best_acc:
             best_acc = val_acc
             best_lr = my_lr
-    print "best validation accuracy achieved during cross-validation: %.2f" % (100*best_acc)
-
-
+    print "best validation accuracy achieved during cross-validation: %.2f, reg = %f" % (100*best_acc, best_lr.reg)
     plt.legend(loc="upper right")
-    plt.xlabel("Proportion train")
-    plt.ylabel("Test Error Rate")
     plt.show()
 
-    
+    # fit and predict using best_lr
+    # my_lr = LR_IRLS(reg=1.0, random_state=manual_seed, verbose=2)
+    best_lr.fit(X_train, y_train)
+    "predicting using best_lr. reg = %f" % best_lr.reg
+    label = best_lr.predict(X_test, y_test)
+
+
     """
     # try preprocess feature by scaling to unit variance before regression, however get the same acc, futile...
     # with regularization, it's recommended to standardize data in preprocessing??
@@ -564,5 +569,3 @@ if __name__ == "__main__":
     old_model = load("LR_IRLS.model")
     label = old_model.predict(X_test, y_test)
     """
-
-    print "done!"
