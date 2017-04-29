@@ -1,0 +1,182 @@
+The cluster 1's ratio is 0.023402, most-frequent 5 words are: 
+learning
+model
+network
+function
+algorithm
+The cluster 2's ratio is 0.040082, most-frequent 5 words are: 
+network
+model
+algorithm
+data
+input
+The cluster 3's ratio is 0.025718, most-frequent 5 words are: 
+network
+model
+unit
+system
+neural
+The cluster 4's ratio is 0.046107, most-frequent 5 words are: 
+network
+learning
+error
+function
+unit
+The cluster 5's ratio is 0.029463, most-frequent 5 words are: 
+network
+model
+learning
+input
+neural
+The cluster 6's ratio is 0.028195, most-frequent 5 words are: 
+network
+unit
+input
+function
+model
+The cluster 7's ratio is 0.038776, most-frequent 5 words are: 
+network
+model
+learning
+neural
+training
+The cluster 8's ratio is 0.028798, most-frequent 5 words are: 
+network
+model
+unit
+input
+learning
+The cluster 9's ratio is 0.031575, most-frequent 5 words are: 
+network
+model
+set
+input
+algorithm
+The cluster 10's ratio is 0.037532, most-frequent 5 words are: 
+network
+data
+training
+set
+system
+The cluster 11's ratio is 0.044769, most-frequent 5 words are: 
+model
+data
+network
+function
+algorithm
+The cluster 12's ratio is 0.034969, most-frequent 5 words are: 
+network
+model
+learning
+input
+weight
+The cluster 13's ratio is 0.034180, most-frequent 5 words are: 
+model
+network
+input
+set
+learning
+The cluster 14's ratio is 0.033418, most-frequent 5 words are: 
+network
+set
+model
+learning
+problem
+The cluster 15's ratio is 0.030074, most-frequent 5 words are: 
+network
+model
+learning
+neuron
+algorithm
+The cluster 16's ratio is 0.030145, most-frequent 5 words are: 
+learning
+network
+model
+function
+neural
+The cluster 17's ratio is 0.023504, most-frequent 5 words are: 
+network
+input
+neural
+system
+model
+The cluster 18's ratio is 0.033668, most-frequent 5 words are: 
+network
+function
+neural
+system
+model
+The cluster 19's ratio is 0.032865, most-frequent 5 words are: 
+function
+network
+input
+model
+data
+The cluster 20's ratio is 0.028085, most-frequent 5 words are: 
+network
+model
+input
+learning
+function
+The cluster 21's ratio is 0.034842, most-frequent 5 words are: 
+network
+model
+input
+neuron
+learning
+The cluster 22's ratio is 0.039482, most-frequent 5 words are: 
+learning
+network
+function
+algorithm
+model
+The cluster 23's ratio is 0.032114, most-frequent 5 words are: 
+network
+algorithm
+learning
+model
+function
+The cluster 24's ratio is 0.037088, most-frequent 5 words are: 
+network
+model
+learning
+input
+function
+The cluster 25's ratio is 0.039014, most-frequent 5 words are: 
+network
+model
+learning
+input
+neuron
+The cluster 26's ratio is 0.029497, most-frequent 5 words are: 
+network
+model
+system
+learning
+function
+The cluster 27's ratio is 0.035859, most-frequent 5 words are: 
+model
+neuron
+network
+input
+neural
+The cluster 28's ratio is 0.025395, most-frequent 5 words are: 
+network
+learning
+input
+set
+function
+The cluster 29's ratio is 0.031179, most-frequent 5 words are: 
+network
+model
+learning
+neural
+function
+The cluster 30's ratio is 0.040205, most-frequent 5 words are: 
+network
+learning
+model
+function
+input
+Average self.similarity is 0.592644
+
