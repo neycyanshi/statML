@@ -17,8 +17,9 @@ from matplotlib.patches import Ellipse
 from utils import var_regularizer, l1_regularizer
 
 def main():
-  np.random.seed(5)
-  tf.set_random_seed(664) # 5, 96, 634
+  manual_seed = 6
+  np.random.seed(manual_seed)
+  tf.set_random_seed(manual_seed)
 
   # data
   n_x = 2  # D
@@ -29,10 +30,10 @@ def main():
   @zs.reuse('model')
   def gmm(observed, n, n_x, n_z):
     with zs.BayesianNet(observed=observed) as model:
-      log_pi = tf.get_variable('log_pi', n_z, initializer=tf.truncated_normal_initializer(mean=1., stddev=0.1),
+      log_pi = tf.get_variable('log_pi', n_z, initializer=tf.truncated_normal_initializer(mean=1., stddev=0.5),
                                regularizer=var_regularizer(1.0))
-      mu = tf.get_variable('mu', [n_x, n_z], initializer=tf.orthogonal_initializer(gain=10.0)) # try uniform init
-      log_sigma = tf.get_variable('log_sigma', [n_x, n_z], initializer=tf.truncated_normal_initializer(stddev=0.2),
+      mu = tf.get_variable('mu', [n_x, n_z], initializer=tf.orthogonal_initializer(gain=4.0)) # try uniform init
+      log_sigma = tf.get_variable('log_sigma', [n_x, n_z], initializer=tf.truncated_normal_initializer(stddev=0.5),
                                   regularizer=l1_regularizer(0.01)) # try not l1_reg
       z = zs.OnehotCategorical('z', log_pi, n_samples=n)
       x_mean = tf.matmul(tf.to_float(z.tensor), tf.transpose(mu))
@@ -92,7 +93,7 @@ def main():
 
   # Define training parameters
   # TODO: add batch operation N in gmm
-  epochs = 3000
+  epochs = 2000
   # save_freq = 1
   # print([var.name for var in tf.trainable_variables()])
 
@@ -103,15 +104,15 @@ def main():
     # sess.run([log_pi_assign, mu_assign, log_sigma_assign])
     log_pi_val, mu_val, log_sigm_val = sess.run([log_pi, mu, log_sigma])
     print('True params in gmm:\nlog_pi:\n{}\nmu:\n{}\nlog_sigma:\n{}\n'\
-          .format(log_pi_val, mu_val, log_sigm_val))
+          .format(log_pi_val/np.linalg.norm(log_pi_val), mu_val, log_sigm_val))
     x_train, z_train = sess.run([x_gen, z_gen])
-    cls_train = np.dot(z_train, np.array([0,1,2])) # cluster_id (N, 1)
+    cls_train = np.dot(z_train, np.arange(n_z)) # cluster_id (N, 1)
 
     # train
     sess.run(tf.global_variables_initializer()) # reset model parmas to random
     log_pi_val, mu_val, log_sigm_val = sess.run([log_pi, mu, log_sigma])
     print('Random initial params in gmm:\nlog_pi:\n{}\nmu:\n{}\nlog_sigma:\n{}\n'\
-          .format(log_pi_val, mu_val, log_sigm_val))
+          .format(log_pi_val/np.linalg.norm(log_pi_val), mu_val, log_sigm_val))
     for epoch in range(epochs):
       np.random.shuffle([x_train, cls_train])
       lbs = [] # TODO: visualize lbs
@@ -124,19 +125,18 @@ def main():
     print('training completed!\n')
     log_pi_val, mu_val, log_sigm_val = sess.run([log_pi, mu, log_sigma])
     print('Estimated params in gmm:\nlog_pi:\n{}\nmu:\n{}\nlog_sigma:\n{}\n'\
-          .format(log_pi_val, mu_val, log_sigm_val))
+          .format(log_pi_val/np.linalg.norm(log_pi_val), mu_val, log_sigm_val))
 
     qz = sess.run(qz_samples, feed_dict={x: x_train})
-    cls_pred = np.dot(qz, np.array([0,1,2]))
+    cls_pred = np.dot(qz, np.arange(n_z))
 
-    color = np.array(['c', 'm', 'y'])
-    # color_pred = np.array(['b', 'g', 'r'])
-    marker = np.array(['o', 'D', '^'])
+    color = np.array(['c', 'm', 'y', 'b', 'g', 'r']) # extend color list if n_z > 6
+    marker = np.array(['o', 'D', '^', 'x', 's', 'v'])
 
     # visualize estimated and original gmm mixture
     # x_new, z_new = sess.run([x_gen, z_gen])
     # cls_new = np.dot(z_new, np.array([0,1,2]))
-    fig = plt.figure(0)
+    fig = plt.figure(num=0, figsize=(6,6))
     ax = fig.add_subplot(111, aspect='equal')
     for i in range(n_z):
       plt.scatter(x_train[cls_train==i,0], x_train[cls_train==i,1],
@@ -145,8 +145,9 @@ def main():
                     facecolor='none')
       ax.add_patch(ell)
       # plt.scatter(x_train[cls_train==i,0], x_train[cls_train==i,1], c=color[i], marker=marker[i], s=50)
-      # plt.scatter(x_new[cls_new==i,0], x_new[cls_new==i,1], c=color_pred[i], marker=marker[i], s=50)
+      # plt.scatter(x_new[cls_new==i,0], x_new[cls_new==i,1], c=color[3+i], marker=marker[i], s=50)
 
+    fig.savefig('N'+str(n_gen)+'_K'+str(n_z)+'_seed'+str(manual_seed)+'.png')
     plt.show()
 
 
