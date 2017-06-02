@@ -142,7 +142,7 @@ def main():
       plt.scatter(x_train[cls_train==i,0], x_train[cls_train==i,1],
                   c=color[cls_pred[cls_train==i]], marker=marker[i], s=50)
       ell = Ellipse(xy=mu_val[:,i], width=6*np.exp(log_sigm_val[0,i]), height=6*np.exp(log_sigm_val[1,i]),
-                    facecolor='none')
+                    edgecolor='#a4a5b5', facecolor='none')
       ax.add_patch(ell)
       # plt.scatter(x_train[cls_train==i,0], x_train[cls_train==i,1], c=color[i], marker=marker[i], s=50)
       # plt.scatter(x_new[cls_new==i,0], x_new[cls_new==i,1], c=color[3+i], marker=marker[i], s=50)
