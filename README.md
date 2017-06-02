@@ -8,4 +8,4 @@ Iterative reweighted least squares method solving Logistic Regression. Also fork
 Implement an EM algorithm to learn the parameters {\pi_k, \mu_{kw}} of mixture multinomial model and test it on the nips dataset.
 
 ## Variational Inference
-Gaussian Mixture model and VAE, implement the generative model with [ZhuSuan](https://github.com/thu-ml/zhusuan)
+Gaussian Mixture model and VAE, implement the generative model with [ZhuSuan](https://github.com/thu-ml/zhusuan).
